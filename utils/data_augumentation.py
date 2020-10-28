@@ -7,7 +7,18 @@ from torchvision import transforms
 from skimage.transform import resize
 
 
+class Compose(object):
+    """引数transformに格納された変形を順番に実行するクラス
+       対象画像とアノテーション画像を同時に変換させます。 
+    """
 
+    def __init__(self, transforms):
+        self.transforms = transforms
+
+    def __call__(self, img, anno_class_img):
+        for t in self.transforms:
+            img, anno_class_img = t(img, anno_class_img)
+        return img, anno_class_img
 
 class RandomCrip(object):
     def __init__(self, cut_size):
